@@ -4,6 +4,7 @@ import in.furqanali.MoneyManager.dto.AuthDto;
 import in.furqanali.MoneyManager.dto.ProfileDto;
 import in.furqanali.MoneyManager.entity.ProfileEntity;
 import in.furqanali.MoneyManager.repository.ProfileRepository;
+import in.furqanali.MoneyManager.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +24,7 @@ public class ProfileService {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
     public ProfileDto registerProfile(ProfileDto profileDto){
 
        ProfileEntity newProfile= toEntity(profileDto);
@@ -107,7 +109,8 @@ public class ProfileService {
     public Map<String,Object> authenticateAndGenerateToken(AuthDto authDto){
         try{
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDto.getEmail(),authDto.getPassword()));
-        return Map.of("token","Jwt token",
+            String token=jwtUtil.generateToken(authDto.getEmail());
+        return Map.of("token",token,
         "user",getPublicProfile(authDto.getEmail()));
         } catch (RuntimeException e) {
             throw new RuntimeException("Invalid email or password");
