@@ -2,6 +2,7 @@ package in.furqanali.MoneyManager.controller;
 
 import in.furqanali.MoneyManager.dto.AuthDto;
 import in.furqanali.MoneyManager.dto.ProfileDto;
+import in.furqanali.MoneyManager.security.JwtRequestFilter;
 import in.furqanali.MoneyManager.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 
 public class ProfileController {
+    private final JwtRequestFilter jwtRequestFilter;
     @GetMapping("/hello")
     public String Hello(){
 
@@ -58,7 +60,11 @@ public class ProfileController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message",e.getMessage()));
     }
     }
+    @GetMapping("/test")
+public String test(){
 
+    return "test Successful";
+}
 
 
 }
